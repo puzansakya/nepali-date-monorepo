@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "publish": "turbo run build && changeset version && changeset publish"
+    "publish": "npx changeset version && npx changeset publish && git push --follow-tags"
   },
   "keywords": [],
   "author": "",
