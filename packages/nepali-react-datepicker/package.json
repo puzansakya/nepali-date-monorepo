@@ -1,15 +1,15 @@
 {
   "name": "nepali-react-datepicker",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "keywords": [],
-  "homepage": "https://github.com/puzansakya/nepali-react-datepicker",
+  "homepage": "https://github.com/puzansakya/nepali-date-monorepo",
   "bugs": {
-    "url": "https://github.com/puzansakya/nepali-react-datepicker"
+    "url": "https://github.com/puzansakya/nepali-date-monorepo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/puzansakya/nepali-react-datepicker.git"
+    "url": "git+https://github.com/puzansakya/nepali-date-monorepo.git"
   },
   "license": "MIT",
   "author": "Puzan Sakya",

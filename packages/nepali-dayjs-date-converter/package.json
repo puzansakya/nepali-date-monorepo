@@ -1,14 +1,14 @@
 {
   "name": "nepali-dayjs-date-converter",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "",
-  "homepage": "https://github.com/puzansakya/nepali-dayjs-date-converter",
+  "homepage": "https://github.com/puzansakya/nepali-date-monorepo",
   "bugs": {
-    "url": "https://github.com/puzansakya/nepali-dayjs-date-converter"
+    "url": "https://github.com/puzansakya/nepali-date-monorepo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/puzansakya/nepali-dayjs-date-converter.git"
+    "url": "git+https://github.com/puzansakya/nepali-date-monorepo.git"
   },
   "license": "MIT",
   "author": "Puzan Sakya",
