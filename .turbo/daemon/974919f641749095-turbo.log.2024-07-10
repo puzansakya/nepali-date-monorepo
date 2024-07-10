@@ -1,0 +1,14 @@
+2024-07-10T04:30:03.657778Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf(".turbo\\cookies"), AnchoredSystemPathBuf(".turbo\\cookies\\1.cookie")}
+2024-07-10T04:30:03.657922Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-07-10T04:30:05.255975Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages\\lib-test"), AnchoredSystemPathBuf("packages\\lib-test\\vite.config.ts.timestamp-1720585805191-a36b167c8e787.mjs")}
+2024-07-10T04:30:05.255999Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("lib-test"), path: AnchoredSystemPathBuf("packages\\lib-test") }}))
+2024-07-10T04:30:05.357328Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages\\lib-test\\vite.config.ts.timestamp-1720585805191-a36b167c8e787.mjs"), AnchoredSystemPathBuf("packages\\lib-test")}
+2024-07-10T04:30:05.357353Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("lib-test"), path: AnchoredSystemPathBuf("packages\\lib-test") }}))
+2024-07-10T04:30:06.962564Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages\\nepali-react-datepicker"), AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\dist\\index.js"), AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\tsup.config.bundled_192j6rfnhqz.mjs")}
+2024-07-10T04:30:06.962579Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("nepali-react-datepicker"), path: AnchoredSystemPathBuf("packages\\nepali-react-datepicker") }}))
+2024-07-10T04:30:07.054444Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\dist\\index.js"), AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\dist\\index.cjs")}
+2024-07-10T04:30:07.054464Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("nepali-react-datepicker"), path: AnchoredSystemPathBuf("packages\\nepali-react-datepicker") }}))
+2024-07-10T04:30:07.054544Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-07-10T04:30:10.956800Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\dist\\index.d.cts"), AnchoredSystemPathBuf("packages\\nepali-react-datepicker\\dist\\index.d.ts")}
+2024-07-10T04:30:10.956816Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("nepali-react-datepicker"), path: AnchoredSystemPathBuf("packages\\nepali-react-datepicker") }}))
+2024-07-10T04:30:10.956871Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun

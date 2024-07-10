@@ -1,0 +1,19 @@
+{
+  "name": "libs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "publish": "turbo run build && changeset version && changeset publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^1.13.3"
+  },
+  "packageManager": "pnpm@8.15.7",
+  "dependencies": {
+    "@changesets/cli": "^2.27.7"
+  }
+}
