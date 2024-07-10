@@ -1,30 +1,72 @@
-# React + TypeScript + Vite
+### React Nepali Datepicker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Install
+```bash
+npm i nepali-datepicker-react
+```
+```bash
+yarn add nepali-datepicker-react
+```
+```bash
+pnpm i nepali-datepicker-react
+```
+### Usage
 
-Currently, two official plugins are available:
+#### Provider usage
+```tsx
+import { useDatePickerStore, selectEvents, selectCtx, disableTogglerAfterMaxEngDate, DatePickerStoreProvider, ModeEnum } from "nepali-datepicker-react";
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<DatePickerStoreProvider props={{
+        mode: ModeEnum.RANGE,
+        closeOnSelect: false,
+        startDate: "",
+        endDate: "",
+        showSecondaryDate: true
+    }} >
+        <div className="items-start flex flex-col gap-3">
+            {...your_component}
+        </div>
+    </DatePickerStoreProvider>
+```
 
-## Expanding the ESLint configuration
+#### Hook usage
+```tsx
+import { zero_pad, DATE_NULLIFIER, selectCtx, selectEvents, useDatePickerStore } from "nepali-datepicker-react";
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+export const PickerBody = () => {
+    const state = useDatePickerStore();
 
-- Configure the top-level `parserOptions` property like this:
+    const { gridDates, weeks, showSecondaryDate } = selectCtx(state)
+    const { selectDay } = selectEvents(state)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
+    return ...
 }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+
+### Props
+**Calendar Props**
+
+| Prop Name         | Type                                | Default         | Description                                                                                                                                                  |
+| ----------------- | ----------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| startDate         | startDate                           | --              |                                                                                                                                                              |
+| endDate           | endDate                             |                 |                                                                                                                                                              |
+| disabledWeekDays  | disabled                            | []              | This is the array of week days that is used to disable the week days in the calendar if value is [1,2,3] then sunday, monday and tuesday cells are disabled. |
+| holidays          | holidays                            | []              | This holds the holidays, based on this cells are disabled                                                                                                    |
+| isNepali          | isNepali                            | false           | This is used to determine if the calendar context is in nepali or english.                                                                                   |
+| mode              | mode                                | ModeEnum.SINGLE | This is the mode of the datepicker.                                                                                                                          |
+| disableDateBefore | string                              | -               | This is the date before which datepicker should be disabled.                                                                                                 |
+| disableDateAfter  | string                              | -               | This is the date after which datepicker should be disabled.                                                                                                  |
+| onChange          | (date: string) => void \| undefined | undefined       | This gets triggered when date changes.                                                                                                                       |
+| onError           | (date: string) => void              | undefined       | This gets triggered when there is an error.                                                                                                                  |
+| isDisabled        | boolean                             | false           | This is the determine if input should be disabled or not.                                                                                                    |
+| isRhfBound        | boolean                             | false           | This is the determine if input should be bound with rhf or not.                                                                                              |
+| showToggle        | boolean                             | false           | Determine if the is nepali toggle button should be shown or not.                                                                                             |
+| closeOnSelect     | boolean                             | false           | Determine if the picker should be closed on day select.                                                                                                      |
+| showSecondaryDate | boolean                             | false           | Determine if the secondary date should be shown or not.                                                                                                      |
+| showRangeMenu   | boolean                             | false           | Determine if the is range menu (this week, this month, etc...) should be shown or not.                                                                       |
+
+
+
+### Roadmap
+- [ ] yearly grid view
