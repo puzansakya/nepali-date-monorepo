@@ -56,7 +56,7 @@ const Toggle = () => {
 
 const RangeSelector = () => {
 
-    const [value, setValue] = React.useState("THIS_MONTH");
+    const [_, setValue] = React.useState("THIS_MONTH");
     const state = useDatePickerStore();
     const { setStartAndEndDate, } = selectEvents(state);
 

@@ -1,17 +1,17 @@
 {
-  "name": "lib-test",
+  "name": "example",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "publish": "npx changeset version && npx changeset publish && git push --follow-tags"
+    "preview": "vite preview"
   },
   "dependencies": {
     "dayjs": "^1.11.11",
-    "nepali-dayjs-date-converter": "^0.9.0",
+    "nepali-dayjs-date-converter": "workspace:*",
+    "nepali-react-datepicker": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1"
@@ -29,7 +29,6 @@
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
-    "nepali-react-datepicker": "workspace:^",
     "vite": "^5.3.1"
   }
 }

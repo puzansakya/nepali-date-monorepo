@@ -1,0 +1,47 @@
+{
+  "name": "nepali-dayjs-date-converter",
+  "version": "0.9.0",
+  "description": "",
+  "homepage": "https://github.com/puzansakya/nepali-dayjs-date-converter",
+  "bugs": {
+    "url": "https://github.com/puzansakya/nepali-dayjs-date-converter"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/puzansakya/nepali-dayjs-date-converter.git"
+  },
+  "license": "MIT",
+  "author": "Puzan Sakya",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external dayjs",
+    "build": "tsup src/index.ts --format cjs,esm --dts --external dayjs",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "keywords": [],
+  "peerDependencies": {
+    "dayjs": "^1.11.11"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.11"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@vitest/ui": "^1.6.0",
+    "esbuild": "^0.21.5",
+    "npm-dts": "^1.3.12",
+    "tsup": "^8.1.0",
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false
+}
