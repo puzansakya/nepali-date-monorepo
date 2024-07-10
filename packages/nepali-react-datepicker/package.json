@@ -1,7 +1,6 @@
 {
   "name": "nepali-react-datepicker",
-  "private": true,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "type": "module",
   "keywords": [],
   "homepage": "https://github.com/puzansakya/nepali-react-datepicker",
