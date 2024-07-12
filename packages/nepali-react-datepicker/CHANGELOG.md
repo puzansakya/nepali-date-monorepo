@@ -1,5 +1,13 @@
 # nepali-react-datepicker
 
+## 0.1.8
+
+### Patch Changes
+
+- 96e109d: Minor change updates
+- Updated dependencies [96e109d]
+  - nepali-dayjs-date-converter@0.9.3
+
 ## 0.1.7
 
 ### Patch Changes
