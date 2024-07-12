@@ -158,7 +158,7 @@ export const EnglishStrategy: ICalendarStrategy = {
       const grid_rows = range(0, weeks_in_english_month - 1)
       const grid_cols = range(1, 7)
 
-      ctx.next.gridDates = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => ENGLISH_DATE.get_day_info({
+      const gridData = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => ENGLISH_DATE.get_day_info({
         weekNum,
         weekDayNum,
         calendarReferenceDate: ctx.next.calendarReferenceDate,
@@ -167,9 +167,81 @@ export const EnglishStrategy: ICalendarStrategy = {
         disable_date_after: _disable_date_after,
         disabledWeekDays: ctx.next.disabledWeekDays,
         holidays: ctx.next.holidays,
-      })
+      })))
+
+      ctx.next.gridDates = gridData
+
+    }
+
+    next()
+  },
+
+  setGridDatesWithMeta: (ctx, next) => {
+    debug_mode && console.log('EnglishStrategy: setGridDatesWithMeta')
+
+    if (ctx.next.isOpen) {
+      const weeks_in_english_month = ENGLISH_DATE.get_weeks_in_month(
+        new Date(ctx.next.calendarReferenceDate)
       )
-      )
+
+      let _disable_date_before = ctx.next.disableDateBefore
+      let _disable_date_after = ctx.next.disableDateAfter
+
+      if (ModeEnum.RANGE === ctx.next.mode) {
+        const res = normalizeDisabledDates(
+          {
+            startDate: ctx.next.startDate,
+            endDate: ctx.next.endDate,
+          },
+          {
+            disableDateBefore: ctx.next.disableDateBefore as string,
+            disableDateAfter: ctx.next.disableDateAfter as string,
+          },
+          ctx.next.currentDateSelection
+        )
+
+        _disable_date_before = res.disableDateBefore
+        _disable_date_after = res.disableDateAfter
+      }
+
+      const grid_rows = range(0, weeks_in_english_month - 1)
+      const grid_cols = range(1, 7)
+
+      const gridData = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => ENGLISH_DATE.get_day_info({
+        weekNum,
+        weekDayNum,
+        calendarReferenceDate: ctx.next.calendarReferenceDate,
+        date: ctx.next[ctx.next.currentDateSelection],
+        disable_date_before: _disable_date_before,
+        disable_date_after: _disable_date_after,
+        disabledWeekDays: ctx.next.disabledWeekDays,
+        holidays: ctx.next.holidays,
+      })))
+
+      // set grid dates
+      ctx.next.gridDatesWithMeta.gridDates = gridData
+
+      // set calendar controller label
+      const [year, month] = ctx.next.calendarReferenceDate.split('-')
+      ctx.next.gridDatesWithMeta.primaryYear = +year
+      ctx.next.gridDatesWithMeta.primaryMonth = ENGLISH_MONTHS[+month - 1]
+
+      // set month year panel data
+      const now = new Date(ctx.next.calendarReferenceDate)
+
+      if (dayjs(MAX_ENG_DATE).isBefore(ctx.next.calendarReferenceDate)) {
+  
+        ctx.next.gridDatesWithMeta.secondaryYear = -1
+        ctx.next.gridDatesWithMeta.secondaryMonthCombination = nepaliMonthMap[now.getMonth()]
+      } else {
+        
+        const nepaliDate = ADToBS(ctx.next.calendarReferenceDate)
+        const [nepali_year] = nepaliDate?.split('-') ?? []
+        
+        ctx.next.gridDatesWithMeta.secondaryYear = +nepali_year
+        ctx.next.gridDatesWithMeta.secondaryMonthCombination = nepaliMonthMap[now.getMonth()]
+      }
+
     }
 
     next()
@@ -281,6 +353,7 @@ export const EnglishStrategy: ICalendarStrategy = {
 
     next()
   },
+
   updateGridYearWithNextDecade: function (ctx, next): void {
     debug_mode && console.log('EnglishStrategy: updateGridYearWithNextDecade')
     const currentDecadeLastYear = ctx.next.gridYears[ctx.next.gridYears.length - 1]
@@ -506,6 +579,92 @@ export const EnglishStrategy: ICalendarStrategy = {
           disabledWeekDays: ctx.next.disabledWeekDays,
           holidays: ctx.next.holidays,
         }))))
+      })
+
+    }
+
+    next()
+  },
+  setYearGridDatesWithMeta: (ctx: any, next: Next<any>): void => {
+    debug_mode && console.log('EnglishStrategy: setYearGridDatesWithMeta')
+
+    if (ctx.next.isOpen) {
+
+      let _disable_date_before = ctx.next.disableDateBefore
+      let _disable_date_after = ctx.next.disableDateAfter
+
+      if (ModeEnum.RANGE === ctx.next.mode) {
+        const res = normalizeDisabledDates(
+          {
+            startDate: ctx.next.startDate,
+            endDate: ctx.next.endDate,
+          },
+          {
+            disableDateBefore: ctx.next.disableDateBefore,
+            disableDateAfter: ctx.next.disableDateAfter,
+          },
+          ctx.next.currentDateSelection
+        )
+
+        _disable_date_before = res.disableDateBefore
+        _disable_date_after = res.disableDateAfter
+      }
+
+      const [current_year] = ctx.next.calendarReferenceDate.split("-")
+
+      let current_year_calendar_reference_date = Array.from({ length: 12 }, (_, i) => {
+        return `${current_year}-${zero_pad(i + 1)}-01`
+      })
+
+      ctx.next.yearGridDatesWithMeta = []
+      current_year_calendar_reference_date.forEach((calendarReferenceDate) => {
+
+        const weeks_in_english_month = ENGLISH_DATE.get_weeks_in_month(
+          new Date(calendarReferenceDate)
+        )
+
+
+        const grid_rows = range(0, weeks_in_english_month - 1)
+        const grid_cols = range(1, 7)
+
+        const gridDates = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => ENGLISH_DATE.get_day_info({
+          weekNum,
+          weekDayNum,
+          calendarReferenceDate,
+          date: ctx.next[ctx.next.currentDateSelection],
+          disable_date_before: _disable_date_before,
+          disable_date_after: _disable_date_after,
+          disabledWeekDays: ctx.next.disabledWeekDays,
+          holidays: ctx.next.holidays,
+        })))
+
+        // set calendar controller label
+        const [year, month] = calendarReferenceDate.split('-')
+
+        // set month year panel data
+        const now = new Date(calendarReferenceDate)
+
+        let secondaryYear = -1
+        let secondaryMonthCombination = "-"
+
+        if (dayjs(MAX_ENG_DATE).isBefore(calendarReferenceDate)) {
+        } else {
+          const nepaliDate = ADToBS(calendarReferenceDate)
+          const [nepali_year] = nepaliDate?.split('-') ?? []
+
+          secondaryYear = +nepali_year
+          secondaryMonthCombination = nepaliMonthMap[now.getMonth()]
+        }
+
+        const gridDatesWithMeta = {
+          gridDates: gridDates,
+          primaryYear: +year,
+          primaryMonth: ENGLISH_MONTHS[+month - 1],
+          secondaryYear,
+          secondaryMonthCombination,
+        }
+
+        ctx.next.yearGridDatesWithMeta.push(gridDatesWithMeta)
       })
 
     }

@@ -5,8 +5,12 @@ import { ad2bs, bs2ad } from '.';
 describe('Nepali Date Converter', () => {
     it('ad2bs', () => {
 
-        expect(ad2bs("2021-01-01")).toBe("2077-09-17")
 
+        expect(ad2bs("2021-01-01")).toBe("2077-09-17")
+        
+        expect(ad2bs("2024-04-12")).toBe("2080-12-30")
+        expect(ad2bs("2024-04-13")).toBe("2081-01-01")
+        expect(ad2bs("2024-04-14")).toBe("2081-01-02")
         expect(ad2bs("2024-04-15")).toBe("2081-01-03")
         expect(ad2bs("2024-04-27")).toBe("2081-01-15")
         expect(ad2bs("2024-05-13")).toBe("2081-01-31")
@@ -23,6 +27,8 @@ describe('Nepali Date Converter', () => {
         expect(ad2bs("2024-07-16")).toBe("2081-04-01")
         expect(ad2bs("2024-07-30")).toBe("2081-04-15")
         expect(ad2bs("2024-08-16")).toBe("2081-04-32")
+       
+
         
     });
   

@@ -181,7 +181,66 @@ export const NepaliStrategy: ICalendarStrategy = {
     next()
   },
 
-  setMonthYearPanelData: function (ctx, next): void {
+  setGridDatesWithMeta: (ctx, next) => {
+    if (ctx.next.isOpen) {
+      debug_mode && console.log('NepaliStrategy: setGridDatesWithMeta')
+
+      if (ctx.next.calendarReferenceDate) {
+        invariant(
+          isDateInConversionRange(ctx.next.calendarReferenceDate, false),
+          'Calendar reference date should be in conversion range!',
+        )
+      }
+
+      if (ctx.next[ctx.next.currentDateSelection]) {
+        invariant(
+          isDateInConversionRange(ctx.next[ctx.next.currentDateSelection], false),
+          'Date should be in conversion range!',
+        )
+      }
+      const weeks_in_month = NEPALI_DATE.get_weeks_in_month(
+        parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
+      )
+
+      let _disable_date_after = ctx.next.disableDateAfter
+      let _disable_date_before = ctx.next.disableDateBefore
+
+      const grid_rows = range(0, weeks_in_month)
+      const grid_cols = range(1, 7)
+
+      const gridDates = grid_rows.map((weekNum: number) =>
+        grid_cols.map((weekDayNum: number) =>
+          NEPALI_DATE.get_day_info({
+            weekNum: weekNum,
+            weekDayNum: weekDayNum,
+            calendarReferenceDate: parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
+            date: parse_date(ADToBS(ctx.next[ctx.next.currentDateSelection]) as string),
+            disable_date_before: _disable_date_before,
+            disable_date_after: _disable_date_after,
+            disabledWeekDays: ctx.next.disabledWeekDays,
+            holidays: ctx.next.holidays,
+          }),
+        ),
+      )
+
+      ctx.next.gridDatesWithMeta.gridDates = gridDates
+
+      // set calendar controller label
+      const [np_year, np_month] = (ADToBS(ctx.next.calendarReferenceDate) as string).split('-')
+      ctx.next.gridDatesWithMeta.primaryYear = +np_year
+      ctx.next.gridDatesWithMeta.primaryMonth = months.ne[+np_month - 1]
+
+      // set month year panel data
+      const [en_year] = ctx.next.calendarReferenceDate.split('-')
+
+      ctx.next.gridDatesWithMeta.secondaryYear = +en_year
+      ctx.next.gridDatesWithMeta.secondaryMonthCombination = englishMonthMap[parseInt(np_month + '') - 1]
+
+    }
+    next()
+  },
+
+  setMonthYearPanelData: (ctx, next) => {
     if (ctx.next.isOpen) {
       debug_mode && console.log('NepaliStrategy: setMonthYearPanelData')
       const [_, nepMM] = ctx.next.calendarReferenceDate.split('-')
@@ -574,6 +633,85 @@ export const NepaliStrategy: ICalendarStrategy = {
           disabledWeekDays: ctx.next.disabledWeekDays,
           holidays: ctx.next.holidays,
         }))))
+      })
+    }
+    next()
+  },
+  setYearGridDatesWithMeta: (ctx, next): void => {
+    if (ctx.next.isOpen) {
+      debug_mode && console.log('NepaliStrategy: setYearGridDatesWithMeta')
+
+      const [current_year] = ADToBS(ctx.next.calendarReferenceDate).split("-")
+
+      let current_year_calendar_reference_date = Array.from({ length: 12 }, (_, i) => {
+        return `${current_year}-${zero_pad(i + 1)}-01`
+      }).map(currentDateSelection => {
+        return BSToAD(currentDateSelection)
+      })
+
+      if (ctx.next[ctx.next.currentDateSelection]) {
+        invariant(
+          isDateInConversionRange(ctx.next[ctx.next.currentDateSelection], false),
+          'Date should be in conversion range!'
+        )
+      }
+
+      let _disable_date_after = ctx.next.disableDateAfter
+      let _disable_date_before = ctx.next.disableDateBefore
+
+      ctx.next.yearGridDatesWithMeta = []
+
+      current_year_calendar_reference_date.forEach((calendarReferenceDate) => {
+        if (calendarReferenceDate) {
+          invariant(
+            isDateInConversionRange(calendarReferenceDate, false),
+            'Calendar reference date should be in conversion range!'
+          )
+        }
+
+        const weeks_in_month = NEPALI_DATE.get_weeks_in_month(
+          parse_date(ADToBS(calendarReferenceDate) as string)
+        )
+
+        const grid_rows = range(0, weeks_in_month)
+        const grid_cols = range(1, 7)
+
+        const gridDates = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => NEPALI_DATE.get_day_info({
+          weekNum: weekNum,
+          weekDayNum: weekDayNum,
+          calendarReferenceDate: parse_date(ADToBS(calendarReferenceDate) as string),
+          date: parse_date(ADToBS(ctx.next[ctx.next.currentDateSelection]) as string),
+          disable_date_before: _disable_date_before,
+          disable_date_after: _disable_date_after,
+          disabledWeekDays: ctx.next.disabledWeekDays,
+          holidays: ctx.next.holidays,
+        })))
+
+        // set calendar controller label
+        const np_date = (ADToBS(calendarReferenceDate) as string)
+        console.log(calendarReferenceDate, np_date)
+
+        const [np_year, np_month] = np_date.split('-')
+        
+        let primaryYear = +np_year
+        let primaryMonth = months.ne[+np_month - 1]
+
+        // set month year panel data
+        const [en_year] = ctx.next.calendarReferenceDate.split('-')
+
+        let secondaryYear = +en_year
+        let secondaryMonthCombination = englishMonthMap[parseInt(np_month + '') - 1]
+
+
+        const gridDatesWithMeta = {
+          gridDates,
+          primaryYear,
+          primaryMonth,
+          secondaryYear,
+          secondaryMonthCombination
+        }
+
+        ctx.next.yearGridDatesWithMeta.push(gridDatesWithMeta)
       })
     }
     next()

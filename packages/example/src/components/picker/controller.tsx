@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 import { AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { PropsWithChildren } from "react";
-import { selectEvents, useDatePickerStore, disableAfterMaxEngDate, zero_pad, selectCtx } from "nepali-react-datepicker";
+import { selectEvents, useDatePickerStore, disableAfterMaxEngDate, zero_pad, selectCtx, selectCalendarControllerLabel, ICalendarInternals, selectCalendarControllerLabelFromGridDates } from "nepali-react-datepicker";
 import { ADToBS, BSToAD } from "nepali-dayjs-date-converter";
 
 interface ButtonProps extends PropsWithChildren, Record<string, any> {
-    className?:string
- }
+    className?: string
+}
 export const Button = ({ children, className, ...rest }: ButtonProps) => {
     return <button className={`px-3 py-1 hover:bg-green-500 transition-all duration-150 ${className}`} {...rest}>{children}</button>
 }
@@ -103,25 +103,38 @@ export const NextYearButton = () => {
     );
 };
 
-
 export const MonthButton = () => {
-    const { goToMonthView } = selectEvents(useDatePickerStore());
-    const { controllerLabel } = selectCtx(useDatePickerStore());
+    const state = useDatePickerStore()
+    const { gridDatesWithMeta: { primaryMonth } } = selectCtx(state)
+
+    const { goToMonthView } = selectEvents(state);
 
     return (
         <Button onClick={goToMonthView}>
-            {controllerLabel.month}
+            {primaryMonth}
         </Button>
     );
 };
 
 export const YearButton = () => {
-    const { goToYearView } = selectEvents(useDatePickerStore());
-    const { controllerLabel } = selectCtx(useDatePickerStore());
+    const state = useDatePickerStore()
+    const { goToYearView } = selectEvents(state);
+    const { gridDatesWithMeta: { primaryYear } } = selectCtx(state)
 
     return (
         <Button onClick={goToYearView}        >
-            {controllerLabel.year}
+            {primaryYear}
         </Button>
     );
 };
+
+export const MonthInfo = ({ gridDatesWithMeta: { primaryYear, primaryMonth } }:
+    Pick<ICalendarInternals, 'gridDatesWithMeta'>
+) => {
+    return <div className="flex justify-center items-center gap-3 w-full" >
+        {primaryMonth}
+        <p>-</p>
+        {primaryYear}
+    </div>
+}
+

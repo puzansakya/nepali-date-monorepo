@@ -60,6 +60,23 @@ export interface ICalendarStrategy {
   setGridDates: (ctx: any, next: Next<any>) => void
 
   /**
+   * sets monthly grid dates with meta information
+   * @param ctx 
+   * @param next 
+   * @returns 
+   */
+  setGridDatesWithMeta: (ctx: { next: ICalendarCtx }, next: Next<any>) => void
+
+  /**
+   * sets yearly grid dates with meta information
+   * @param ctx 
+   * @param next 
+   * @returns 
+   */
+  setYearGridDatesWithMeta: (ctx: { next: ICalendarCtx }, next: Next<any>) => void
+
+
+  /**
    * sets each month grid dates for whole year
    * @param ctx 
    * @param next 
@@ -242,6 +259,14 @@ export interface ICalendarProps {
   showRangeMenu?: boolean
 }
 
+export interface IGridDatesWithMeta {
+  gridDates: IDayInfo[][],
+  primaryYear: number,
+  primaryMonth: string
+  secondaryYear: number,
+  secondaryMonthCombination: string
+}
+
 export interface ICalendarInternals {
   /**
    * Holds the reference of the start date input
@@ -263,11 +288,6 @@ export interface ICalendarInternals {
    */
   isOpen: boolean
 
-  // /**
-  //  * Determine if the range menu selector is open or not
-  //  */
-  // isMenuOpen: boolean;
-
   /**
    * Determine the direction of animation
    * while rendering
@@ -286,6 +306,16 @@ export interface ICalendarInternals {
    * based on calendarReferenceDate .
    */
   gridDates: IDayInfo[][]
+
+  /**
+   * Updated verison of gridDates with meta data
+   */
+  gridDatesWithMeta: IGridDatesWithMeta
+  
+  /**
+   * Updated verison of gridDates with meta data for year view mode
+   */
+  yearGridDatesWithMeta: IGridDatesWithMeta[]
 
   /**
    * Stores the data for whole year's grid

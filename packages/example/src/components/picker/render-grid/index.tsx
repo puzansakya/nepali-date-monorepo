@@ -1,22 +1,22 @@
-import { zero_pad, DATE_NULLIFIER, selectCtx, selectEvents, useDatePickerStore } from "nepali-react-datepicker";
+import { DATE_NULLIFIER, ICalendarEvents, ICalendarInternals, ICalendarProps, zero_pad } from "nepali-react-datepicker";
 
-export const PickerBody = () => {
-    const state = useDatePickerStore();
+export const RenderGrid = ({ gridDates, selectDay, weeks, showSecondaryDate }:
+    Pick<ICalendarProps, 'showSecondaryDate'> &
+    Pick<ICalendarInternals, 'gridDates' | "weeks"> &
+    Pick<ICalendarEvents, 'selectDay'>
+) => {
 
-    const { gridDates, weeks, showSecondaryDate } = selectCtx(state)
-    const { selectDay } = selectEvents(state)
-
-    return <table >
+    return <table className="border border-gray-700 ">
         <thead id='header'>
-            <tr id='weekday_panel' className="p-2">
+            <tr id='weekday_panel' className="p-1">
                 {weeks.map((weekDay: string, index: number) => (
                     <td
                         key={index}
                         id='weekday'
-                        className="px-3 py-2 hover:bg-green-500 cursor-pointer transition-all duration-150"
+                        className="px-3 py-1 hover:bg-green-500 cursor-pointer transition-all duration-150"
                     >
                         <div className="flex items-center justify-center">
-                        {weekDay}
+                            {weekDay}
                         </div>
                     </td>
                 ))}
@@ -30,11 +30,11 @@ export const PickerBody = () => {
                     <tr
                         key={`week-row-${weekRowIdx}`}
                         id='day_panel'
-                        className="p-2"
+                        className="p-1"
                     >
                         {calendarDate.map((dayInfo, weekDayIdx) => {
 
-                            let className = "flex items-end gap-2 justify-center  px-3 py-2 hover:bg-green-500 cursor-pointer transition-all duration-150"
+                            let className = "flex items-end gap-1 justify-center px-1 hover:bg-green-500 cursor-pointer transition-all duration-150"
 
                             if (dayInfo.isSelected) {
                                 className += " bg-blue-500"

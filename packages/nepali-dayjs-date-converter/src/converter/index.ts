@@ -41,6 +41,8 @@ export const ad2bs = (date: string) => {
 
     let adjusted_diff = diff < 0 ? total_days - accumulator_arr[found_index - 1] : diff;
 
+    // console.log("accumulator_arr[found_index]", accumulator_arr[found_index])
+    // console.log("found_index", found_index)
     // console.log("total days", value_arr[found_index].month_days[13])
     // console.log("diff", diff)
     // console.log("adjusted_diff", adjusted_diff)
@@ -64,7 +66,7 @@ export const ad2bs = (date: string) => {
         adjusted_diff--;
     }
 
-    let resolved_year = value_arr[found_index].year
+    let resolved_year = diff === adjusted_diff ? value_arr[found_index].year + 1 : value_arr[found_index].year
 
     return `${resolved_year}-${zero_pad(nep_mm)}-${zero_pad(nep_dd)}`
 }

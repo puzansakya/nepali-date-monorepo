@@ -1,15 +1,18 @@
-import { useDatePickerStore, selectCtx } from "nepali-react-datepicker"
+import { ICalendarInternals, selectCtx, useDatePickerStore } from "nepali-react-datepicker"
 
-export const MonthYearPanel = () => {
+export const MonthYearPanel = ({ gridDatesWithMeta: {secondaryMonthCombination, secondaryYear}  }:
+    Pick<ICalendarInternals, 'gridDatesWithMeta'> 
+) => {
 
     const state = useDatePickerStore()
 
-    const { monthYearPanelData, showSecondaryDate } = selectCtx(state)
+    const { showSecondaryDate } = selectCtx(state)
 
-    if(!showSecondaryDate) {
+    if (!showSecondaryDate) {
         return null
     }
-    return <div className="w-full text-sm text-center py-2 text-gray-300">
-        {monthYearPanelData}
+    
+    return <div className="w-full bg-gray-800 text-xs text-center py-2 text-gray-300">
+        {secondaryMonthCombination}  {secondaryYear}
     </div>
 }

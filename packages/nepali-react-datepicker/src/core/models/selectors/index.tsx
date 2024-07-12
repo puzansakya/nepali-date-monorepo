@@ -1,5 +1,8 @@
 import { ADToBS, isDateInConversionRange, MAX_NEP_YEAR, MIN_NEP_YEAR } from 'nepali-dayjs-date-converter'
 import { ICalendarState } from '../model'
+import { ENGLISH_MONTHS, IDayInfo, MAX_ENG_DATE, nepaliMonthMap } from '../../../calendar-engine'
+import dayjs from 'dayjs'
+import { englishToNepaliNumber } from 'nepali-number'
 
 export const selectEvents = (state: ICalendarState) => state.events
 export const selectCtx = (state: ICalendarState) => state.ctx
@@ -55,5 +58,39 @@ export const selectStartDate = (state: ICalendarState): string => {
 }
 
 export const selectEndDate = (state: ICalendarState): string => {
-  return state.ctx.isNepali && !!state.ctx?.endDate? ADToBS(state.ctx.endDate as string) : state.ctx.endDate as string;
+  return state.ctx.isNepali && !!state.ctx?.endDate ? ADToBS(state.ctx.endDate as string) : state.ctx.endDate as string;
+}
+
+export const selectCalendarControllerLabel = (state: ICalendarState): { month: string, year: string } => {
+  const [year, month] = state.ctx.calendarReferenceDate.split('-')
+
+  return {
+    month: ENGLISH_MONTHS[+month - 1],
+    year: year
+  }
+}
+
+export const selectCalendarControllerLabelFromGridDates = (state: ICalendarState, gridDates: IDayInfo[][]): any => {
+  const {workingMonth, workingYear} = gridDates[0].find(x=> x.workingDay === 1) as IDayInfo
+  return {
+    month: ENGLISH_MONTHS[(workingMonth as number) - 1],
+    year: workingYear +""
+  }
+
+}
+
+export const selectMonthYearPanelData = (state: ICalendarState): string => {
+  const now = new Date(state.ctx.calendarReferenceDate)
+
+  let data =""
+  if (dayjs(MAX_ENG_DATE).isBefore(state.ctx.calendarReferenceDate)) {
+    data = '-'
+    return data
+  }
+
+  const nepaliDate = ADToBS(state.ctx.calendarReferenceDate)
+  const splited = nepaliDate?.split('-') ?? []
+  const nepaliYear = englishToNepaliNumber(splited[0])
+
+  return `${nepaliMonthMap[now.getMonth()]} ${nepaliYear}`
 }

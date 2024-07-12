@@ -1,35 +1,28 @@
-import { DATE_NULLIFIER, IDayInfo, selectCtx, selectEvents, useDatePickerStore, zero_pad } from "nepali-react-datepicker";
+import { DATE_NULLIFIER, ICalendarEvents, ICalendarInternals, ICalendarProps, selectCtx, selectEvents, useDatePickerStore, zero_pad } from "nepali-react-datepicker";
 
-export const YearBody = () => {
+export const PickerBodyWithWeekSelector = () => {
     const state = useDatePickerStore();
 
-    const { yearGridDates } = selectCtx(state)
+    const { gridDatesWithMeta, weeks, showSecondaryDate } = selectCtx(state)
+    const { setStartAndEndDate,  } = selectEvents(state)
 
-    const yearGridDatesChunked: any[] = [];
-    for (let i = 0; i < yearGridDates.length; i += 3) {
-        yearGridDatesChunked.push(yearGridDates.slice(i, i + 3));
-    }
-
-    if (yearGridDatesChunked.length === 0) {
-        return
-    }
-
-    return <table className="w-full">
-        {Array.from({ length: 4 }, (_, i) => i).map((item: number) => {
-            return <tr className="flex items-start">
-                {yearGridDatesChunked[item].map((gridDates: any, index: number) => <td className="p-4 " key={index}><RenderGrid gridDates={gridDates} /></td>)}
-            </tr>
-        })}
-    </table>
-
+    return <RenderGrid
+        gridDates={gridDatesWithMeta.gridDates}
+        setStartAndEndDate={setStartAndEndDate}
+        weeks={weeks}
+        showSecondaryDate={showSecondaryDate}
+    />
 }
 
-const RenderGrid = ({ gridDates }: { gridDates: IDayInfo[][] }) => {
-    const state = useDatePickerStore();
-    const { weeks, showSecondaryDate } = selectCtx(state)
-    const { selectDay } = selectEvents(state)
 
-    return <table className=" border border-gray-700 mt-4">
+
+ const RenderGrid = ({ gridDates, setStartAndEndDate, weeks, showSecondaryDate }:
+    Pick<ICalendarProps, 'showSecondaryDate'> &
+    Pick<ICalendarInternals, 'gridDates' | "weeks"> &
+    Pick<ICalendarEvents, 'setStartAndEndDate'>
+) => {
+
+    return <table className="border border-gray-700 ">
         <thead id='header'>
             <tr id='weekday_panel' className="p-1">
                 {weeks.map((weekDay: string, index: number) => (
@@ -49,24 +42,19 @@ const RenderGrid = ({ gridDates }: { gridDates: IDayInfo[][] }) => {
             id='body'
         >
             {gridDates.map((calendarDate, weekRowIdx) => {
+                const isSelected = calendarDate.some(dayInfo => dayInfo.isSelected)
                 return (
                     <tr
                         key={`week-row-${weekRowIdx}`}
                         id='day_panel'
-                        className="p-1"
+                        className={`p-1 hover:bg-red-500 hover:text-gray-50 rounded-full transition-all duration-150 ${isSelected ? "bg-red-500" : ""}`}
                     >
                         {calendarDate.map((dayInfo, weekDayIdx) => {
 
-                            let className = "flex items-end gap-1 justify-center px-1 hover:bg-green-500 cursor-pointer transition-all duration-150"
+                            let className = "flex items-end gap-1 justify-center px-1  cursor-pointer transition-all duration-150"
 
-                            if (dayInfo.isSelected) {
-                                className += " bg-blue-500"
-                            }
                             if (dayInfo.isToday) {
                                 className += " bg-green-500"
-                            }
-                            if (dayInfo.isDisabled) {
-                                className += " opacity-50"
                             }
 
                             return (
@@ -79,9 +67,13 @@ const RenderGrid = ({ gridDates }: { gridDates: IDayInfo[][] }) => {
                                             return;
                                         }
 
-                                        const working_date = `${dayInfo?.workingYear}-${zero_pad(dayInfo?.workingMonth as number,)}-${zero_pad(dayInfo?.workingDay as number)}`;
+                                        const startDate = `${gridDates[weekRowIdx][0]?.workingYear}-${zero_pad(gridDates[weekRowIdx][0]?.workingMonth as number,)}-${zero_pad(gridDates[weekRowIdx][0]?.workingDay as number)}`;
+                                        const endDate = `${gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingYear}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingMonth as number,)}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingDay as number)}`;
 
-                                        selectDay(working_date);
+                                        setStartAndEndDate({
+                                            startDate,
+                                            endDate,
+                                        })
                                     }}
                                 >
                                     <div aria-label='cell' id='cell' className={className}>

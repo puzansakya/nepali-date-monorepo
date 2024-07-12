@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-// @ts-ignore
+  // @ts-ignore
 import _ from 'lodash'
 import { createStore } from 'zustand'
 import { ENGLISH_MONTHS, weeks } from '../../calendar-engine'
@@ -19,23 +19,23 @@ import {
 export const DEFAULT_PROPS: ICalendarProps = {
   mode: ModeEnum.RANGE,
 
-  // todo: [REFACTOR DATE]
+    // todo: [REFACTOR DATE]
   startDate: '',
-  endDate: '',
+  endDate  : '',
 
-  isNepali: false,
-  showToggle: true,
-  closeOnSelect: true,
+  isNepali         : false,
+  showToggle       : true,
+  closeOnSelect    : true,
   showSecondaryDate: false,
   disableDateBefore: '',
-  disableDateAfter: '',
-  disabledWeekDays: [],
-  holidays: [],
-  isDisabled: false,
-  isRhfBound: false,
-  showRangeMenu: true,
-  onChange: () => {},
-  onError: () => {},
+  disableDateAfter : '',
+  disabledWeekDays : [],
+  holidays         : [],
+  isDisabled       : false,
+  isRhfBound       : false,
+  showRangeMenu    : true,
+  onChange         : () => { },
+  onError          : () => { },
 }
 
 export const INTERNAL_PROPS: ICalendarInternals = {
@@ -46,6 +46,14 @@ export const INTERNAL_PROPS: ICalendarInternals = {
   animationDirection   : 'right',
   calendarReferenceDate: dayjs().format('YYYY-MM-DD'),
   gridDates            : [],
+  gridDatesWithMeta    : {
+    gridDates                : [],
+    primaryYear              : 0,
+    primaryMonth             : "",
+    secondaryYear            : 0,
+    secondaryMonthCombination: "",
+  },
+  yearGridDatesWithMeta: [],
   yearGridDates        : [],
   viewMode             : ViewModeEnum.CALENDAR_VIEW,
   monthYearPanelData   : '',
@@ -56,13 +64,13 @@ export const INTERNAL_PROPS: ICalendarInternals = {
   weeks                : weeks['en'],
   controllerLabel      : {
     month: '',
-    year: '',
+    year : '',
   },
 }
 
 type type_get = () => ICalendarState
 type type_set = (
-  partial:
+  partial: 
     | ICalendarState
     | Partial<ICalendarState>
     | ((state: ICalendarState) => ICalendarState | Partial<ICalendarState>),
@@ -76,72 +84,74 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const cloned = _.cloneDeep(get().ctx)
 
-      // GET STRATEGY
+        // GET STRATEGY
       const strategyProvider = getStrategy(cloned.isNepali as boolean)
 
-      // SYNC IS DISABLED
+        // SYNC IS DISABLED
       if (props.isDisabled !== undefined) {
         cloned.isDisabled = props.isDisabled
       }
 
-      // SYNC DISABLED WEEK DAYS
+        // SYNC DISABLED WEEK DAYS
       if (props.disabledWeekDays !== undefined) {
         cloned.disabledWeekDays = props.disabledWeekDays
       }
 
-      // SYNC SHOW TOGGLE
+        // SYNC SHOW TOGGLE
       if (props.showToggle !== undefined) {
         cloned.showToggle = props.showToggle
       }
 
-      // SYNC SHOW TOGGLE
+        // SYNC SHOW TOGGLE
       if (props.closeOnSelect !== undefined) {
         cloned.closeOnSelect = props.closeOnSelect
       }
 
-      // SYNC SHOW SECONDARY DATE
+        // SYNC SHOW SECONDARY DATE
       if (props.showSecondaryDate !== undefined) {
         cloned.showSecondaryDate = props.showSecondaryDate
       }
 
-      // SYNC HOLIDAYS
+        // SYNC HOLIDAYS
       if (props.holidays !== undefined) {
         cloned.holidays = props.holidays
       }
 
-      // SYNC ENABLE RANGE MENU
+        // SYNC ENABLE RANGE MENU
       if (props.showRangeMenu !== undefined) {
         cloned.showRangeMenu = props.showRangeMenu
       }
 
-      // SYNC isNepali
-      if (props.isNepali !== undefined) {
-        cloned.isNepali = props.isNepali;
-      }
+        // SYNC isNepali
+        // commented because of state sync bug
+        // if (props.isNepali !== undefined) {
+        //   cloned.isNepali = props.isNepali;
+        // }
 
       const p = Pipeline<any>()
 
-      /**
+        /**
        * EXECUTE IN ORDER
        */
 
-      // SYNC DATE PROPS
+        // SYNC DATE PROPS
       p.push(
         strategyProvider.setConvertedDate({
           startDate: props?.startDate,
-          endDate: props?.endDate,
+          endDate  : props?.endDate,
         }),
       )
       p.push(strategyProvider.setCalendarReferenceDate)
 
-      // SYNC DISABLE DATE BEFORE
+        // SYNC DISABLE DATE BEFORE
       p.push(strategyProvider.setDisableDateBefore(props?.disableDateBefore || ''))
 
-      // SYNC DISABLE DATE AFTER
+        // SYNC DISABLE DATE AFTER
       p.push(strategyProvider.setDisableDateAfter(props?.disableDateAfter || ''))
 
       p.push(strategyProvider.setGridMonths)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
 
       p.push(commitCtx(set))
@@ -156,7 +166,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const cloned = _.cloneDeep(get().ctx)
 
-      cloned.isOpen = true
+      cloned.isOpen               = true
       cloned.currentDateSelection = type
 
       const strategyProvider = getStrategy(cloned.isNepali as boolean)
@@ -168,7 +178,9 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setCalendarReferenceDate)
       p.push(strategyProvider.setIsTodayValid(today))
       p.push(strategyProvider.setGridDates)
-      p.push(strategyProvider.setYearGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
+      // p.push(strategyProvider.setYearGridDates)
+      p.push(strategyProvider.setYearGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -201,6 +213,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.incrementMonth)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -223,6 +236,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.decrementMonth)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -240,6 +254,8 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.incrementYear)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setYearGridDatesWithMeta)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -257,6 +273,8 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.decrementYear)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setYearGridDatesWithMeta)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -277,6 +295,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setDate(date))
       p.push(strategyProvider.checkIfStartDateIsBeforeEndDate)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
 
       if (
         cloned.mode === ModeEnum.SINGLE ||
@@ -285,15 +304,15 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
         p.push(strategyProvider.closeCalendarPicker)
       }
 
-      // p.push(printCtx);
+        // p.push(printCtx);
       p.push(commitCtx(set))
-      // p.push(strategyProvider.sendChanges(changeUpdater));
+        // p.push(strategyProvider.sendChanges(changeUpdater));
 
       await p.execute({
         next: cloned,
       })
 
-      // now its turn for enddate
+        // now its turn for enddate
       cloned = _.cloneDeep(get().ctx)
       if (cloned.mode === ModeEnum.RANGE && cloned.currentDateSelection === 'startDate') {
         if (cloned.endDateRef.current) {
@@ -313,10 +332,11 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const p = Pipeline<any>()
 
-      p.push(strategyProvider.checkIfTodayIsValid) // might not need
+      p.push(strategyProvider.checkIfTodayIsValid)  // might not need
       p.push(strategyProvider.setTodayAsDate(today))
       p.push(strategyProvider.setTodayAsCalendarReferenceDate)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(strategyProvider.closeCalendarPicker)
@@ -459,6 +479,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.selectMonth(month))
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(strategyProvider.setViewModeToCalendar)
@@ -478,13 +499,14 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const p = Pipeline<any>()
       p.push(strategyProvider.checkIfDateIsValid)
-      // p.push(commitCtx(set));
+        // p.push(commitCtx(set));
 
       p.push(strategyProvider.setDateForTypingEvent(date))
       p.push(strategyProvider.checkIfStartDateIsBeforeEndDate)
-      p.push(strategyProvider.sendChanges) // sus
+      p.push(strategyProvider.sendChanges)  // sus
       p.push(strategyProvider.setCalendarReferenceDate)
       p.push(strategyProvider.setGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
@@ -499,10 +521,10 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const cloned = _.cloneDeep(get().ctx)
 
-      // ALWAYS TOGGLE FIRST
+        // ALWAYS TOGGLE FIRST
       cloned.isNepali = !cloned.isNepali
 
-      // THEN GET STRATEGY
+        // THEN GET STRATEGY
       const strategyProvider = getStrategy(cloned.isNepali as boolean)
 
       const p = Pipeline<any>()
@@ -511,11 +533,13 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setCalendarReferenceDate)
       p.push(strategyProvider.setGridMonths)
       p.push(strategyProvider.setGridDates)
-      p.push(strategyProvider.setYearGridDates)
+      p.push(strategyProvider.setGridDatesWithMeta)
+      // p.push(strategyProvider.setYearGridDates)
+      p.push(strategyProvider.setYearGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
       p.push(commitCtx(set))
-      // p.push(strategyProvider.sendChanges);
+        // p.push(strategyProvider.sendChanges);
 
       await p.execute({
         next: cloned,
@@ -531,6 +555,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       const p = Pipeline<any>()
       p.push(strategyProvider.setStartAndEndDate(date.startDate, date.endDate))
+      p.push(strategyProvider.setGridDatesWithMeta)
       p.push(commitCtx(set))
       p.push(strategyProvider.sendChanges)
 
@@ -549,26 +574,26 @@ export const createMyStore = (initialProps: ICalendarProps) => {
   }
 
   return createStore<ICalendarState>((set, get) => ({
-    ctx: finalizedCtx,
+    ctx   : finalizedCtx,
     events: getEvents(get, set),
   }))
 }
 
-const commitCtx =
-  (set: type_set) =>
-  (ctx: any, next: Next<any>): void => {
-    debug_mode && console.log('Core: set ctx')
+const commitCtx = 
+                              (set: type_set) => 
+  (ctx: any, next: Next<any>): void           => {
+      debug_mode && console.log('Core: set ctx')
 
-    console.log(ctx.next)
+      console.log(ctx.next)
 
-    set({ ctx: ctx.next })
+      set({ ctx: ctx.next })
 
-    next()
-  }
+      next()
+    }
 
-// const printCtx = (ctx: any, next: Next<any>): void => {
-//   debug_mode && console.log('printint ctx');
+  // const printCtx = (ctx: any, next: Next<any>): void => {
+  //   debug_mode && console.log('printint ctx');
 
-//   console.log(JSON.stringify(ctx, null, 2))
-//   next();
-// };
+  //   console.log(JSON.stringify(ctx, null, 2))
+  //   next();
+  // };
