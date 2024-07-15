@@ -52,14 +52,6 @@ export interface ICalendarStrategy {
   setIsTodayValid: (today: string) => (ctx: any, next: Next<any>) => void
 
   /**
-   * sets monthly grid dates
-   * @param ctx 
-   * @param next 
-   * @returns 
-   */
-  setGridDates: (ctx: any, next: Next<any>) => void
-
-  /**
    * sets monthly grid dates with meta information
    * @param ctx 
    * @param next 
@@ -299,13 +291,6 @@ export interface ICalendarInternals {
    * generate the calendar grid date.
    */
   calendarReferenceDate: string
-
-  /**
-   * This is holds the generated dates
-   * for the calendar grid
-   * based on calendarReferenceDate .
-   */
-  gridDates: IDayInfo[][]
 
   /**
    * Updated verison of gridDates with meta data

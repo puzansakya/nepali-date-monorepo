@@ -137,51 +137,6 @@ export const NepaliStrategy: ICalendarStrategy = {
       next()
     },
 
-  setGridDates: function (ctx, next): void {
-    if (ctx.next.isOpen) {
-      debug_mode && console.log('NepaliStrategy: setGridDates')
-
-      if (ctx.next.calendarReferenceDate) {
-        invariant(
-          isDateInConversionRange(ctx.next.calendarReferenceDate, false),
-          'Calendar reference date should be in conversion range!',
-        )
-      }
-
-      if (ctx.next[ctx.next.currentDateSelection]) {
-        invariant(
-          isDateInConversionRange(ctx.next[ctx.next.currentDateSelection], false),
-          'Date should be in conversion range!',
-        )
-      }
-      const weeks_in_month = NEPALI_DATE.get_weeks_in_month(
-        parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
-      )
-
-      let _disable_date_after = ctx.next.disableDateAfter
-      let _disable_date_before = ctx.next.disableDateBefore
-
-      const grid_rows = range(0, weeks_in_month)
-      const grid_cols = range(1, 7)
-
-      ctx.next.gridDates = grid_rows.map((weekNum: number) =>
-        grid_cols.map((weekDayNum: number) =>
-          NEPALI_DATE.get_day_info({
-            weekNum: weekNum,
-            weekDayNum: weekDayNum,
-            calendarReferenceDate: parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
-            date: parse_date(ADToBS(ctx.next[ctx.next.currentDateSelection]) as string),
-            disable_date_before: _disable_date_before,
-            disable_date_after: _disable_date_after,
-            disabledWeekDays: ctx.next.disabledWeekDays,
-            holidays: ctx.next.holidays,
-          }),
-        ),
-      )
-    }
-    next()
-  },
-
   setGridDatesWithMeta: (ctx, next) => {
     if (ctx.next.isOpen) {
       debug_mode && console.log('NepaliStrategy: setGridDatesWithMeta')

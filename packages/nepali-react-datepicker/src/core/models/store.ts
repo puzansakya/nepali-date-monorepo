@@ -45,7 +45,6 @@ export const INTERNAL_PROPS: ICalendarInternals = {
   isOpen               : false,
   animationDirection   : 'right',
   calendarReferenceDate: dayjs().format('YYYY-MM-DD'),
-  gridDates            : [],
   gridDatesWithMeta    : {
     gridDates                : [],
     primaryYear              : 0,
@@ -150,7 +149,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setDisableDateAfter(props?.disableDateAfter || ''))
 
       p.push(strategyProvider.setGridMonths)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
 
@@ -177,7 +175,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setViewModeToCalendar)
       p.push(strategyProvider.setCalendarReferenceDate)
       p.push(strategyProvider.setIsTodayValid(today))
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       // p.push(strategyProvider.setYearGridDates)
       p.push(strategyProvider.setYearGridDatesWithMeta)
@@ -212,7 +209,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.incrementMonth)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -235,7 +231,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.decrementMonth)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -253,7 +248,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.incrementYear)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setYearGridDatesWithMeta)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
@@ -272,7 +266,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.decrementYear)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setYearGridDatesWithMeta)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
@@ -294,7 +287,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.setDate(date))
       p.push(strategyProvider.checkIfStartDateIsBeforeEndDate)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
 
       if (
@@ -335,7 +327,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.checkIfTodayIsValid)  // might not need
       p.push(strategyProvider.setTodayAsDate(today))
       p.push(strategyProvider.setTodayAsCalendarReferenceDate)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -478,7 +469,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.selectMonth(month))
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -505,7 +495,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.checkIfStartDateIsBeforeEndDate)
       p.push(strategyProvider.sendChanges)  // sus
       p.push(strategyProvider.setCalendarReferenceDate)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -532,7 +521,6 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.convertdatesToCurrentContext)
       p.push(strategyProvider.setCalendarReferenceDate)
       p.push(strategyProvider.setGridMonths)
-      p.push(strategyProvider.setGridDates)
       p.push(strategyProvider.setGridDatesWithMeta)
       // p.push(strategyProvider.setYearGridDates)
       p.push(strategyProvider.setYearGridDatesWithMeta)

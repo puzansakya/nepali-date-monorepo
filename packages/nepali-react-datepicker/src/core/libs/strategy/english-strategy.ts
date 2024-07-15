@@ -127,56 +127,6 @@ export const EnglishStrategy: ICalendarStrategy = {
     next()
   },
 
-  setGridDates: function (ctx, next): void {
-    debug_mode && console.log('EnglishStrategy: setGridDates')
-
-    if (ctx.next.isOpen) {
-      const weeks_in_english_month = ENGLISH_DATE.get_weeks_in_month(
-        new Date(ctx.next.calendarReferenceDate)
-      )
-
-      // DUPLICATE CODE REFACTOR
-      let _disable_date_before = ctx.next.disableDateBefore
-      let _disable_date_after = ctx.next.disableDateAfter
-
-      if (ModeEnum.RANGE === ctx.next.mode) {
-        const res = normalizeDisabledDates(
-          {
-            startDate: ctx.next.startDate,
-            endDate: ctx.next.endDate,
-          },
-          {
-            disableDateBefore: ctx.next.disableDateBefore,
-            disableDateAfter: ctx.next.disableDateAfter,
-          },
-          ctx.next.currentDateSelection
-        )
-
-        _disable_date_before = res.disableDateBefore
-        _disable_date_after = res.disableDateAfter
-      }
-
-      const grid_rows = range(0, weeks_in_english_month - 1)
-      const grid_cols = range(1, 7)
-
-      const gridData = grid_rows.map((weekNum: number) => grid_cols.map((weekDayNum: number) => ENGLISH_DATE.get_day_info({
-        weekNum,
-        weekDayNum,
-        calendarReferenceDate: ctx.next.calendarReferenceDate,
-        date: ctx.next[ctx.next.currentDateSelection],
-        disable_date_before: _disable_date_before,
-        disable_date_after: _disable_date_after,
-        disabledWeekDays: ctx.next.disabledWeekDays,
-        holidays: ctx.next.holidays,
-      })))
-
-      ctx.next.gridDates = gridData
-
-    }
-
-    next()
-  },
-
   setGridDatesWithMeta: (ctx, next) => {
     debug_mode && console.log('EnglishStrategy: setGridDatesWithMeta')
 
