@@ -1,4 +1,4 @@
-import { ad2bs } from 'nepali-dayjs-date-converter'
+import { ad2bs } from '../../../vendor/nepali-dayjs-date-converter'
 import * as from_domains from '../../domains'
 
 const ADToBS = ad2bs

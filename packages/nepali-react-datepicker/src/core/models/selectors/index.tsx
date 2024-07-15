@@ -1,4 +1,4 @@
-import { ADToBS, isDateInConversionRange, MAX_NEP_YEAR, MIN_NEP_YEAR } from 'nepali-dayjs-date-converter'
+import { ADToBS, isDateInConversionRange, MAX_NEP_YEAR, MIN_NEP_YEAR } from '../../../vendor/nepali-dayjs-date-converter'
 import { ICalendarState } from '../model'
 import { ENGLISH_MONTHS, IDayInfo, MAX_ENG_DATE, nepaliMonthMap } from '../../../calendar-engine'
 import dayjs from 'dayjs'

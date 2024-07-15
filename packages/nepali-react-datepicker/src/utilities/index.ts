@@ -113,3 +113,38 @@ export function get_year_list_in_decade_for_en_ctx(current_year: number) {
 
   return decadeYears
 }
+
+
+interface IDates {
+  startDate: string
+  endDate: string
+}
+
+interface IDisabledDates {
+  disableDateBefore: string
+  disableDateAfter: string
+}
+
+// todo: consolidate validation
+export const normalizeDisabledDates = (
+  date: IDates,
+  disabledDates: IDisabledDates,
+  currentDateSelection: string,
+) => {
+  const { startDate, endDate } = date
+  let workingDisableDateBefore = disabledDates.disableDateBefore
+  let workingDisableDateAfter = disabledDates.disableDateAfter
+
+  if (currentDateSelection === 'startDate' && endDate) {
+    workingDisableDateAfter = endDate
+  }
+
+  if (currentDateSelection === 'endDate' && startDate) {
+    workingDisableDateBefore = startDate
+  }
+
+  return {
+    disableDateBefore: workingDisableDateBefore,
+    disableDateAfter: workingDisableDateAfter,
+  }
+}

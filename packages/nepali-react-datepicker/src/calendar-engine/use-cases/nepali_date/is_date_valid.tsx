@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import * as fromCalendarEngine from '../..'
-import { ad2bs, bs2ad } from 'nepali-dayjs-date-converter'
+import { ad2bs, bs2ad } from '../../../vendor/nepali-dayjs-date-converter'
 
 const BSToAD = bs2ad,
   ADToBS = ad2bs

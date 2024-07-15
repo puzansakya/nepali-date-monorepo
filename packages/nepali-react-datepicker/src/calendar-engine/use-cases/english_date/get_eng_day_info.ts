@@ -1,4 +1,4 @@
-import { bs2ad } from 'nepali-dayjs-date-converter'
+import { bs2ad } from '../../../vendor/nepali-dayjs-date-converter'
 
 const BSToAD = bs2ad
 export const get_eng_day_info = (nepYearn: number, nepMonth: number, nepDay: number) => {

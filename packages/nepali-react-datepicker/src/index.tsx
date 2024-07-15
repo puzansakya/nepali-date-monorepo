@@ -1,5 +1,5 @@
 
-export { ADToBS, BSToAD, lookUp, zero_pad } from 'nepali-dayjs-date-converter';
+export { ADToBS, BSToAD, lookUp, zero_pad } from './vendor/nepali-dayjs-date-converter';
 export { DATE_NULLIFIER } from './calendar-engine';
 export type { IDayInfo } from './calendar-engine';
 

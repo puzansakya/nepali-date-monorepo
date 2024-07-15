@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { englishToNepaliNumber } from 'nepali-number'
 
 // UTILS
-import { ad2bs, zero_pad } from 'nepali-dayjs-date-converter'
+import { ad2bs, zero_pad } from '../../../vendor/nepali-dayjs-date-converter'
 import {
   ENGLISH_DATE,
   ENGLISH_MONTHS,
@@ -20,6 +20,7 @@ import {
 } from '../../../utilities/utils'
 import { debug_mode, ErrorMessage } from '../../config'
 import { ICalendarStrategy, ModeEnum, ViewModeEnum } from '../../models/model'
+import { normalizeDisabledDates } from '../../../utilities'
 
 /**
  * Global referece for today's date
@@ -623,7 +624,6 @@ export const EnglishStrategy: ICalendarStrategy = {
           new Date(calendarReferenceDate)
         )
 
-
         const grid_rows = range(0, weeks_in_english_month - 1)
         const grid_cols = range(1, 7)
 
@@ -670,39 +670,5 @@ export const EnglishStrategy: ICalendarStrategy = {
     }
 
     next()
-  }
-}
-
-interface IDates {
-  startDate: string
-  endDate: string
-}
-
-interface IDisabledDates {
-  disableDateBefore: string
-  disableDateAfter: string
-}
-
-// todo: consolidate validation
-const normalizeDisabledDates = (
-  date: IDates,
-  disabledDates: IDisabledDates,
-  currentDateSelection: string,
-) => {
-  const { startDate, endDate } = date
-  let workingDisableDateBefore = disabledDates.disableDateBefore
-  let workingDisableDateAfter = disabledDates.disableDateAfter
-
-  if (currentDateSelection === 'startDate' && endDate) {
-    workingDisableDateAfter = endDate
-  }
-
-  if (currentDateSelection === 'endDate' && startDate) {
-    workingDisableDateBefore = startDate
-  }
-
-  return {
-    disableDateBefore: workingDisableDateBefore,
-    disableDateAfter: workingDisableDateAfter,
   }
 }

@@ -1,4 +1,4 @@
-import { lookUp } from 'nepali-dayjs-date-converter'
+import { lookUp } from '../../../vendor/nepali-dayjs-date-converter'
 import * as from_constants from '../../constants'
 import { previous_month } from './previous_month'
 import { previous_year } from './previous_year'

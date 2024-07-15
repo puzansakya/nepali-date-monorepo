@@ -11,7 +11,7 @@ import * as from_utilities from '../../utilities'
 import { get_first_day_of_the_month } from './get_first_day_of_the_month'
 import { is_today } from './is_today'
 import { check_if_in_range } from '../../../utilities'
-import { ad2bs, isDateInConversionRange } from 'nepali-dayjs-date-converter'
+import { ad2bs, isDateInConversionRange } from '../../../vendor/nepali-dayjs-date-converter'
 
 dayjs.extend(isBetween)
 

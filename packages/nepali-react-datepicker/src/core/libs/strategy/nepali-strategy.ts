@@ -9,7 +9,7 @@ import {
   MAX_NEP_YEAR,
   MIN_NEP_YEAR,
   zero_pad,
-} from 'nepali-dayjs-date-converter'
+} from '../../../vendor/nepali-dayjs-date-converter'
 import {
   englishMonthMap,
   months,
@@ -22,6 +22,7 @@ import { Next } from '../../../utilities/pipeline'
 import { get_year_list_in_decade, parseSafeDate, validate } from '../../../utilities/utils'
 import { debug_mode, ErrorMessage } from '../../config'
 import { ICalendarStrategy, ModeEnum, ViewModeEnum } from '../../models/model'
+import { normalizeDisabledDates } from '../../../utilities'
 
 // Error('Invariant violation: This will throw!');
 /**
@@ -198,12 +199,30 @@ export const NepaliStrategy: ICalendarStrategy = {
           'Date should be in conversion range!',
         )
       }
-      const weeks_in_month = NEPALI_DATE.get_weeks_in_month(
-        parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
-      )
 
       let _disable_date_after = ctx.next.disableDateAfter
       let _disable_date_before = ctx.next.disableDateBefore
+
+      if (ModeEnum.RANGE === ctx.next.mode) {
+        const res = normalizeDisabledDates(
+          {
+            startDate: ctx.next.startDate,
+            endDate: ctx.next.endDate,
+          },
+          {
+            disableDateBefore: ctx.next.disableDateBefore || "",
+            disableDateAfter: ctx.next.disableDateAfter || "",
+          },
+          ctx.next.currentDateSelection
+        )
+
+        _disable_date_before = res.disableDateBefore
+        _disable_date_after = res.disableDateAfter
+      }
+      console.log(_disable_date_before, _disable_date_after)
+      const weeks_in_month = NEPALI_DATE.get_weeks_in_month(
+        parse_date(ADToBS(ctx.next.calendarReferenceDate) as string),
+      )
 
       const grid_rows = range(0, weeks_in_month)
       const grid_cols = range(1, 7)
@@ -692,7 +711,7 @@ export const NepaliStrategy: ICalendarStrategy = {
         console.log(calendarReferenceDate, np_date)
 
         const [np_year, np_month] = np_date.split('-')
-        
+
         let primaryYear = +np_year
         let primaryMonth = months.ne[+np_month - 1]
 

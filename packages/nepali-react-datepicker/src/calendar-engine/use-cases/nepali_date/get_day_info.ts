@@ -6,7 +6,7 @@ import * as fromCalendarEngine from '../../index'
 import * as from_utilities from '../../utilities'
 import { ENGLISH_DATE } from '../english_date'
 import { check_if_in_range } from '../../../utilities'
-import { ad2bs } from 'nepali-dayjs-date-converter'
+import { ad2bs } from '../../../vendor/nepali-dayjs-date-converter'
 
 const ADToBS = ad2bs
 export const get_day_info = ({

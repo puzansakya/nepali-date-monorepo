@@ -1,6 +1,6 @@
 // migrated
 import dayjs from 'dayjs'
-import { bs2ad } from 'nepali-dayjs-date-converter'
+import { bs2ad } from '../../../vendor/nepali-dayjs-date-converter'
 import * as from_domains from '../../domains'
 
 const BSToAD = bs2ad

@@ -1,7 +1,7 @@
 // @ts-ignore
 import { isEmpty } from 'lodash'
 import * as from_utilities from '.'
-import { lookUp, BSToAD } from 'nepali-dayjs-date-converter'
+import { lookUp, BSToAD } from '../../vendor/nepali-dayjs-date-converter'
 
 export const parse_date = (date: string, separator = '-'): any => {
   if (isEmpty(date)) {
