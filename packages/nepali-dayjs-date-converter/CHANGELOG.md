@@ -1,5 +1,11 @@
 # nepali-dayjs-date-converter
 
+## 0.9.4
+
+### Patch Changes
+
+- minor bug fixes
+
 ## 0.9.3
 
 ### Patch Changes
