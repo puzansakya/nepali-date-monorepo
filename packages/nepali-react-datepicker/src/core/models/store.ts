@@ -42,7 +42,7 @@ export const INTERNAL_PROPS: ICalendarInternals = {
   startDateRef         : { current: null },
   endDateRef           : { current: null },
   currentDateSelection : 'startDate',
-  isOpen               : false,
+  isOpen               : true,
   animationDirection   : 'right',
   calendarReferenceDate: dayjs().format('YYYY-MM-DD'),
   gridDatesWithMeta    : {
@@ -140,7 +140,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
           endDate  : props?.endDate,
         }),
       )
-      p.push(strategyProvider.setCalendarReferenceDate)
+      p.push(strategyProvider.setCalendarReferenceDate(false))
 
         // SYNC DISABLE DATE BEFORE
       p.push(strategyProvider.setDisableDateBefore(props?.disableDateBefore || ''))
@@ -173,7 +173,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
 
       p.push(strategyProvider.checkIfDateIsValid)
       p.push(strategyProvider.setViewModeToCalendar)
-      p.push(strategyProvider.setCalendarReferenceDate)
+      p.push(strategyProvider.setCalendarReferenceDate(false))
       p.push(strategyProvider.setIsTodayValid(today))
       p.push(strategyProvider.setGridDatesWithMeta)
       // p.push(strategyProvider.setYearGridDates)
@@ -494,7 +494,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       p.push(strategyProvider.setDateForTypingEvent(date))
       p.push(strategyProvider.checkIfStartDateIsBeforeEndDate)
       p.push(strategyProvider.sendChanges)  // sus
-      p.push(strategyProvider.setCalendarReferenceDate)
+      p.push(strategyProvider.setCalendarReferenceDate(false))
       p.push(strategyProvider.setGridDatesWithMeta)
       p.push(strategyProvider.setMonthYearPanelData)
       p.push(strategyProvider.setCalendarControllerLabels)
@@ -519,7 +519,7 @@ const getEvents = (get: type_get, set: type_set): ICalendarEvents => {
       const p = Pipeline<any>()
 
       p.push(strategyProvider.convertdatesToCurrentContext)
-      p.push(strategyProvider.setCalendarReferenceDate)
+      p.push(strategyProvider.setCalendarReferenceDate(false))
       p.push(strategyProvider.setGridMonths)
       p.push(strategyProvider.setGridDatesWithMeta)
       // p.push(strategyProvider.setYearGridDates)

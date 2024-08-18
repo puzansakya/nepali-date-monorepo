@@ -46,7 +46,7 @@ export interface ICalendarStrategy {
     startDate: string
     endDate: string
   }) => (ctx: any, next: Next<any>) => void
-  setCalendarReferenceDate: (ctx: any, next: Next<any>) => void
+  setCalendarReferenceDate: (fromTypeEvent:boolean) =>  (ctx: any, next: Next<any>) => void
   setDisableDateBefore: (disableDateBefore: string) => (ctx: any, next: Next<any>) => void
   setDisableDateAfter: (disableDateAfter: string) => (ctx: any, next: Next<any>) => void
   setIsTodayValid: (today: string) => (ctx: any, next: Next<any>) => void
@@ -296,7 +296,7 @@ export interface ICalendarInternals {
    * Updated verison of gridDates with meta data
    */
   gridDatesWithMeta: IGridDatesWithMeta
-  
+
   /**
    * Updated verison of gridDates with meta data for year view mode
    */

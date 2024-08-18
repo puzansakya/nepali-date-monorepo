@@ -2,6 +2,7 @@
 import dayjs from 'dayjs'
 import { englishToNepaliNumber, nepaliToEnglishNumber } from 'nepali-number'
 import invariant from 'tiny-invariant'
+import { completeDate } from "./english-strategy";
 import {
   ADToBS,
   BSToAD,
@@ -81,13 +82,27 @@ export const NepaliStrategy: ICalendarStrategy = {
         next()
       },
 
-  setCalendarReferenceDate: function (ctx: any, next: Next<any>): void {
+  setCalendarReferenceDate: (fromTypeEvent) => function (ctx: any, next: Next<any>): void {
+
     if (ctx.next.isOpen) {
       debug_mode && console.log('NepaliStrategy: setCalendarReferenceDate')
-      if (ctx.next.mode === ModeEnum.RANGE && ctx.next.currentDateSelection === 'endDate' && ctx.next.startDate) {
+
+      if (ctx.next.mode === ModeEnum.RANGE && ctx.next.currentDateSelection === 'endDate' && ctx.next.startDate && !fromTypeEvent) {
         ctx.next.calendarReferenceDate = ctx.next.startDate;
       } else {
-        ctx.next.calendarReferenceDate = ctx.next[ctx.next.currentDateSelection] || dayjs().format('YYYY-MM-DD')
+        if (ctx.next[ctx.next.currentDateSelection]) {
+          const d = completeDate(ctx.next[ctx.next.currentDateSelection])
+          const is_valid = validate(d, ctx.next.disableDateBefore, ctx.next.disableDateAfter).is_valid
+
+          if (is_valid) {
+            ctx.next.calendarReferenceDate = d
+          } else {
+            ctx.next.calendarReferenceDate = dayjs().format('YYYY-MM-DD')
+          }
+
+        } else[
+          ctx.next.calendarReferenceDate = dayjs().format('YYYY-MM-DD')
+        ]
       }
     }
     next()
@@ -355,9 +370,10 @@ export const NepaliStrategy: ICalendarStrategy = {
     (year) =>
       (ctx, next): void => {
         debug_mode && console.log('NepaliStrategy: selectYear')
+        const nepali_date = ADToBS(ctx.next.calendarReferenceDate)
         const stitched_date = stitch_date({
           year,
-          month: +ctx.next.calendarReferenceDate.split('-')[1],
+          month: +nepali_date.split('-')[1],
           day: 1,
         })
 
@@ -389,20 +405,21 @@ export const NepaliStrategy: ICalendarStrategy = {
     next()
   },
 
-  selectMonth:
-    (month) =>
-      (ctx, next): void => {
-        debug_mode && console.log('NepaliStrategy: selectMonth')
-        const stiched_date = stitch_date({
-          year: +ctx.next.calendarReferenceDate.split('-')[0],
-          month,
-          day: 1,
-        })
+  selectMonth: (month) => (ctx, next): void => {
+    debug_mode && console.log('NepaliStrategy: selectMonth')
+    
+    const nepali_date = ADToBS(ctx.next.calendarReferenceDate)
+    
+    const stiched_date = stitch_date({
+      year: +nepali_date.split('-')[0],
+      month,
+      day: 1,
+    })
 
-        ctx.next.calendarReferenceDate = stiched_date
+    ctx.next.calendarReferenceDate = BSToAD(stiched_date)
 
-        next()
-      },
+    next()
+  },
 
   checkIfTodayIsValid: function (ctx: any, next: Next<any>): void {
     debug_mode && console.log('NepaliStrategy: checkIfTodayIsValid')

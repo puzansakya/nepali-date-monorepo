@@ -3,7 +3,6 @@ import dayjs from 'dayjs'
 import { englishToNepaliNumber } from 'nepali-number'
 
 // UTILS
-import { ad2bs, zero_pad } from '../../../vendor/nepali-dayjs-date-converter'
 import {
   ENGLISH_DATE,
   ENGLISH_MONTHS,
@@ -12,15 +11,16 @@ import {
   range,
   stitch_date,
 } from '../../../calendar-engine'
+import { normalizeDisabledDates } from '../../../utilities'
 import { Next } from '../../../utilities/pipeline'
 import {
   get_year_list_in_decade_for_en_ctx,
   parseSafeDate,
   validate,
 } from '../../../utilities/utils'
+import { ad2bs, zero_pad } from '../../../vendor/nepali-dayjs-date-converter'
 import { debug_mode, ErrorMessage } from '../../config'
 import { ICalendarStrategy, ModeEnum, ViewModeEnum } from '../../models/model'
-import { normalizeDisabledDates } from '../../../utilities'
 
 /**
  * Global referece for today's date
@@ -39,7 +39,7 @@ export const EnglishStrategy: ICalendarStrategy = {
   },
 
   setDateForTypingEvent: (date) => (ctx, next): void => {
-    debug_mode && console.log('EnglishStrategy: setDate')
+    debug_mode && console.log('EnglishStrategy: setDateForTypingEvent')
 
     ctx.next[ctx.next.currentDateSelection] = date
 
@@ -62,15 +62,29 @@ export const EnglishStrategy: ICalendarStrategy = {
     next()
   },
 
-  setCalendarReferenceDate: function (ctx, next): void {
-    debug_mode && console.log('EnglishStrategy: setCalendarReferenceDate')
-    if (ctx.next.isOpen && ctx.next.error === '') {
-      if (ctx.next.mode === ModeEnum.RANGE && ctx.next.currentDateSelection === 'endDate' && ctx.next.startDate) {
+  setCalendarReferenceDate: (fromTypeEvent) => (ctx, next) => {
+    debugger
+    if (ctx.next.isOpen) {
+      debug_mode && console.log('EnglishStrategy: setCalendarReferenceDate')
+      if (ctx.next.mode === ModeEnum.RANGE && ctx.next.currentDateSelection === 'endDate' && ctx.next.startDate && !fromTypeEvent) {
         ctx.next.calendarReferenceDate = ctx.next.startDate;
       } else {
-        ctx.next.calendarReferenceDate = ctx.next[ctx.next.currentDateSelection] || dayjs().format('YYYY-MM-DD')
+        if (ctx.next[ctx.next.currentDateSelection]) {
+          const d = completeDate(ctx.next[ctx.next.currentDateSelection])
+          const is_valid = validate(d, ctx.next.disableDateBefore, ctx.next.disableDateAfter).is_valid
+
+          if (is_valid) {
+            ctx.next.calendarReferenceDate = d
+          } else {
+            ctx.next.calendarReferenceDate = dayjs().format('YYYY-MM-DD')
+          }
+
+        } else[
+          ctx.next.calendarReferenceDate = dayjs().format('YYYY-MM-DD')
+        ]
       }
     }
+
     next()
   },
 
@@ -181,14 +195,14 @@ export const EnglishStrategy: ICalendarStrategy = {
       const now = new Date(ctx.next.calendarReferenceDate)
 
       if (dayjs(MAX_ENG_DATE).isBefore(ctx.next.calendarReferenceDate)) {
-  
+
         ctx.next.gridDatesWithMeta.secondaryYear = -1
         ctx.next.gridDatesWithMeta.secondaryMonthCombination = nepaliMonthMap[now.getMonth()]
       } else {
-        
+
         const nepaliDate = ADToBS(ctx.next.calendarReferenceDate)
         const [nepali_year] = nepaliDate?.split('-') ?? []
-        
+
         ctx.next.gridDatesWithMeta.secondaryYear = +nepali_year
         ctx.next.gridDatesWithMeta.secondaryMonthCombination = nepaliMonthMap[now.getMonth()]
       }
@@ -621,4 +635,48 @@ export const EnglishStrategy: ICalendarStrategy = {
 
     next()
   }
+}
+
+export const completeDate = (input: string) => {
+  // Convert input to string and remove dashes
+  input = input.toString().replace(/-/g, '');
+
+  // Extract parts based on the length of the input
+  let year, month = '01', day = '01';
+
+  if (input.length === 4) {
+    // Input is just the year
+    year = input;
+  } else if (input.length === 6) {
+    // Input is year and month
+    year = input.substring(0, 4);
+    month = input.substring(4, 6);
+  } else if (input.length === 8) {
+    // Input is year, month, and day
+    year = input.substring(0, 4);
+    month = input.substring(4, 6);
+    day = input.substring(6, 8);
+  } else {
+    return input
+  }
+
+  // Ensure the parts are valid numbers
+  if (isNaN(+year) || year.length !== 4) {
+    return input
+  }
+  if (isNaN(+month) || +month < 1 || +month > 12) {
+    return 'Invalid month';
+  }
+  if (isNaN(+day) || +day < 1 || +day > 31) {
+    return input
+  }
+
+  // Ensure month and day are two digits
+  if (month.length === 1) month = '0' + month;
+  if (day.length === 1) day = '0' + day;
+
+  // Format the date string as YYYY-MM-DD
+  const date = `${year}-${month}-${day}`;
+
+  return date;
 }

@@ -151,5 +151,8 @@ export const parseSafeDate = (date: string) => {
   if (!date) {
     return ''
   }
+  if (date.length < 10) {
+    return date
+  }
   return `${date[0]}${date[1]}${date[2]}${date[3]}-${date[5]}${date[6]}-${date[8]}${date[9]}`
 }
