@@ -8,7 +8,7 @@ export const PickerBody = () => {
     const { selectDay } = selectEvents(state)
 
     return <RenderGrid
-        gridDates={gridDatesWithMeta.gridDates}
+        gridDatesWithMeta={gridDatesWithMeta}
         selectDay={selectDay}
         weeks={weeks}
         showSecondaryDate={showSecondaryDate}

@@ -31,7 +31,7 @@ export const YearBody = () => {
                         <MonthYearPanel gridDatesWithMeta={data} />
 
                         <RenderGrid
-                            gridDates={data.gridDates}
+                            gridDatesWithMeta={data.gridDatesWithMeta}
                             selectDay={selectDay}
                             weeks={weeks}
                             showSecondaryDate={showSecondaryDate}

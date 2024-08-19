@@ -1,12 +1,12 @@
 import { DATE_NULLIFIER, ICalendarEvents, ICalendarInternals, ICalendarProps, zero_pad } from "nepali-react-datepicker";
 
-export const RenderGrid = ({ gridDates, selectDay, weeks, showSecondaryDate }:
+export const RenderGrid = ({ gridDatesWithMeta, selectDay, weeks, showSecondaryDate }:
     Pick<ICalendarProps, 'showSecondaryDate'> &
-    Pick<ICalendarInternals, 'gridDates' | "weeks"> &
+    Pick<ICalendarInternals, 'gridDatesWithMeta' | "weeks"> &
     Pick<ICalendarEvents, 'selectDay'>
 ) => {
 
-    return <table className="border border-gray-700 ">
+    return <table className="w-full">
         <thead id='header'>
             <tr id='weekday_panel' className="p-1">
                 {weeks.map((weekDay: string, index: number) => (
@@ -25,7 +25,7 @@ export const RenderGrid = ({ gridDates, selectDay, weeks, showSecondaryDate }:
         <tbody
             id='body'
         >
-            {gridDates.map((calendarDate, weekRowIdx) => {
+            {gridDatesWithMeta.gridDates.map((calendarDate, weekRowIdx) => {
                 return (
                     <tr
                         key={`week-row-${weekRowIdx}`}
@@ -50,7 +50,6 @@ export const RenderGrid = ({ gridDates, selectDay, weeks, showSecondaryDate }:
                                 <td
                                     id='day_base'
                                     key={`week-day-${weekDayIdx}`}
-                                    // className="flex items-center gap-2 justify-center"
                                     onClick={() => {
                                         if (dayInfo.isDisabled) {
                                             return;

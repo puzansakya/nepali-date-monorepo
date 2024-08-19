@@ -8,7 +8,7 @@ export const Today = () => {
     const { isTodayValid } = selectCtx(state)
     const { selectToday } = selectEvents(state)
 
-    return <div className='flex items-center justify-center'>
+    return <div className='flex w-full items-center justify-center'>
         <Button disabled={!isTodayValid} onClick={selectToday}>
             Today
         </Button>

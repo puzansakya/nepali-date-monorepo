@@ -36,13 +36,13 @@ export const DEFAULT_PROPS: ICalendarProps = {
   showRangeMenu    : true,
   onChange         : () => { },
   onError          : () => { },
+  isOpen           : false,
 }
 
 export const INTERNAL_PROPS: ICalendarInternals = {
   startDateRef         : { current: null },
   endDateRef           : { current: null },
   currentDateSelection : 'startDate',
-  isOpen               : true,
   animationDirection   : 'right',
   calendarReferenceDate: dayjs().format('YYYY-MM-DD'),
   gridDatesWithMeta    : {

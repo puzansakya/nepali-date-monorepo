@@ -1,9 +1,5 @@
 import { DatePickerStoreProvider, ModeEnum } from "nepali-react-datepicker";
-import { CalendarViewVariant, CalendarViewWeekSelectorVariant } from "./calendar-view";
-import { DateInput } from "./input";
-import { Toggle } from "./toggle";
-import { RangeSelector } from "./range-selector";
-import { Deburger } from "./deburger";
+import { CalendarViewVariant } from "./calendar-view";
 
 export const Picker = () => {
     return  <DatePickerStoreProvider props={{

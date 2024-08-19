@@ -46,7 +46,7 @@ export interface ICalendarStrategy {
     startDate: string
     endDate: string
   }) => (ctx: any, next: Next<any>) => void
-  setCalendarReferenceDate: (fromTypeEvent:boolean) =>  (ctx: any, next: Next<any>) => void
+  setCalendarReferenceDate: (fromTypeEvent: boolean) => (ctx: any, next: Next<any>) => void
   setDisableDateBefore: (disableDateBefore: string) => (ctx: any, next: Next<any>) => void
   setDisableDateAfter: (disableDateAfter: string) => (ctx: any, next: Next<any>) => void
   setIsTodayValid: (today: string) => (ctx: any, next: Next<any>) => void
@@ -249,6 +249,12 @@ export interface ICalendarProps {
    * be shown or not
    */
   showRangeMenu?: boolean
+
+  /**
+   * Determine if the calendar body is open or not
+   */
+  isOpen?: boolean
+
 }
 
 export interface IGridDatesWithMeta {
@@ -274,11 +280,6 @@ export interface ICalendarInternals {
    * Determine if internals are used for start or end date
    */
   currentDateSelection: 'startDate' | 'endDate'
-
-  /**
-   * Determine if the calendar body is open or not
-   */
-  isOpen: boolean
 
   /**
    * Determine the direction of animation

@@ -10,13 +10,7 @@ import { PickerBodyWithWeekSelector } from "./body-with-week-selector";
 
 const CalendarView = () => {
     const state = useDatePickerStore();
-
-    // const { openCalendar } = selectEvents(state)
     const { gridDatesWithMeta } = selectCtx(state)
-
-    React.useEffect(() => {
-        // openCalendar("startDate")
-    }, [])
 
     return <>
         <Controller />

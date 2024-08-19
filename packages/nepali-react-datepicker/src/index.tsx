@@ -8,7 +8,7 @@ export { ADToBS, BSToAD, lookUp, zero_pad } from './vendor/nepali-dayjs-date-con
 // CORE
 export { ErrorMessage } from "./core/config";
 export { ModeEnum, ViewModeEnum } from './core/models/model';
-export type { ICalendarProps, ICalendarInternals } from './core/models/model';
+export type { ICalendarProps, ICalendarInternals, ICalendarEvents } from './core/models/model';
 export { DatePickerStoreProvider } from './core/models/provider';
 export * from './core/models/selectors';
 export { useDatePickerStore } from './core/models/use-date-picker-store';

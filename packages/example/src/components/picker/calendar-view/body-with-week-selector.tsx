@@ -4,10 +4,10 @@ export const PickerBodyWithWeekSelector = () => {
     const state = useDatePickerStore();
 
     const { gridDatesWithMeta, weeks, showSecondaryDate } = selectCtx(state)
-    const { setStartAndEndDate,  } = selectEvents(state)
+    const { setStartAndEndDate, } = selectEvents(state)
 
     return <RenderGrid
-        gridDates={gridDatesWithMeta.gridDates}
+        gridDatesWithMeta={gridDatesWithMeta}
         setStartAndEndDate={setStartAndEndDate}
         weeks={weeks}
         showSecondaryDate={showSecondaryDate}
@@ -16,9 +16,9 @@ export const PickerBodyWithWeekSelector = () => {
 
 
 
- const RenderGrid = ({ gridDates, setStartAndEndDate, weeks, showSecondaryDate }:
+const RenderGrid = ({ gridDatesWithMeta: {gridDates}, setStartAndEndDate, weeks, showSecondaryDate }:
     Pick<ICalendarProps, 'showSecondaryDate'> &
-    Pick<ICalendarInternals, 'gridDates' | "weeks"> &
+    Pick<ICalendarInternals, 'gridDatesWithMeta' | "weeks"> &
     Pick<ICalendarEvents, 'setStartAndEndDate'>
 ) => {
 
@@ -68,7 +68,7 @@ export const PickerBodyWithWeekSelector = () => {
                                         }
 
                                         const startDate = `${gridDates[weekRowIdx][0]?.workingYear}-${zero_pad(gridDates[weekRowIdx][0]?.workingMonth as number,)}-${zero_pad(gridDates[weekRowIdx][0]?.workingDay as number)}`;
-                                        const endDate = `${gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingYear}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingMonth as number,)}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length -1]?.workingDay as number)}`;
+                                        const endDate = `${gridDates[weekRowIdx][gridDates[weekRowIdx].length - 1]?.workingYear}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length - 1]?.workingMonth as number,)}-${zero_pad(gridDates[weekRowIdx][gridDates[weekRowIdx].length - 1]?.workingDay as number)}`;
 
                                         setStartAndEndDate({
                                             startDate,
